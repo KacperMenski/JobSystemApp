@@ -1,15 +1,15 @@
-﻿using Domain;
+﻿
+using Domain;
 using System.Data;
 using System.Text.Json;
 using UserManagementApp;
 
 namespace JobSystemApp
 {
-    
     class Program
     {
-        
         static List<JobOffer> jobOffers = new List<JobOffer>();
+        static User currentUser = null; 
 
         static void Main(string[] args)
         {
@@ -23,68 +23,118 @@ namespace JobSystemApp
             {
                 Console.Clear();
                 Console.WriteLine("=== System Ofert Pracy ===");
-                Console.WriteLine("1. Rejestracja");
-                Console.WriteLine("2. Logowanie");
-                Console.WriteLine("3. Dodaj ofertę pracy");
-                Console.WriteLine("4. Wyświetl oferty pracy");
-                Console.WriteLine("5. Zapisz oferty do pliku JSON");
-                Console.WriteLine("6. Wczytaj oferty z pliku JSON");
-                Console.WriteLine("0. Wyjście");
+                if (currentUser == null)
+                {
+                    Console.WriteLine("1. Rejestracja");
+                    Console.WriteLine("2. Logowanie");
+                    Console.WriteLine("0. Wyjście");
+                }
+                else
+                {
+                    Console.WriteLine("3. Wyświetl oferty pracy"); // Dostępne dla wszystkich zalogowanych
+                    if (currentUser.Role == "admin")
+                    {
+                        Console.WriteLine("4. Dodaj ofertę pracy"); // Admin-only
+                        Console.WriteLine("5. Zapisz oferty do pliku JSON");
+                        Console.WriteLine("6. Wczytaj oferty z pliku JSON");
+                    }
+                    Console.WriteLine("0. Wyloguj");
+                }
+
                 Console.Write("Wybierz opcję: ");
                 choice = Console.ReadLine();
 
-                switch (choice)
+                if (currentUser == null)
                 {
-                    case "1":
-
-                        UserManager userManager = new UserManager();
-                        Console.Write("Podaj nazwę użytkownika: ");
-                        string username = Console.ReadLine();
-                        Console.Write("Podaj hasło: ");
-                        string password = Console.ReadLine();
-                        Console.Write("Podaj rolę (Admin/User): ");
-                        string role = Console.ReadLine().ToLower();
-                            userManager.RegisterUser(username, password, role);
-
-                        
-                        
-                        break;
-                    case "2":
-                        UserManager userManager2 = new UserManager();
-                        Console.Write("Podaj nazwę użytkownika: ");
-                        string loginUsername = Console.ReadLine();
-                        Console.Write("Podaj hasło: ");
-                        string loginPassword = Console.ReadLine();
-                        User user = new User()
-                        {
-                            Username = loginUsername,
-                            Password = loginPassword
-                        };
-                        userManager2.Login(user);
-                        break;
-                    case "3":
-                        AddJobOffer();
-                        break;
-                    case "4":
-                        DisplayJobOffers();
-                        break;
-                    case "5":
-                        SaveToJSON();
-                        break;
-                    case "6":
-                        LoadFromJSON();
-                        break;
+                    switch (choice)
+                    {
+                        case "1":
+                            RegisterUser();
+                            break;
+                        case "2":
+                            LoginUser();
+                            break;
+                        case "0":
+                            Console.WriteLine("Do widzenia!");
+                            return; // Kończy działanie programu
+                    }
                 }
-            } while (choice != "0");
+                else
+                {
+                    switch (choice)
+                    {
+                        case "3":
+                            if (IsLoggedIn()) DisplayJobOffers();
+                            break;
+                        case "4":
+                            if (IsLoggedIn() && currentUser.Role == "admin") AddJobOffer();
+                            break;
+                        case "5":
+                            if (IsLoggedIn() && currentUser.Role == "admin") SaveToJSON();
+                            break;
+                        case "6":
+                            if (IsLoggedIn() && currentUser.Role == "admin") LoadFromJSON();
+                            break;
+                        case "0":
+                            currentUser = null; // Wylogowanie
+                            Console.WriteLine("Wylogowano. Wróć do logowania.");
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+
+            } while (true);
         }
-        
+
+        static bool IsLoggedIn()
+        {
+            if (currentUser == null)
+            {
+                Console.WriteLine("Musisz być zalogowany, aby wykonać tą operację.");
+                Console.ReadKey();
+                return false;
+            }
+            return true;
+        }
+
+        static void RegisterUser()
+        {
+            UserManager userManager = new UserManager();
+            Console.Write("Podaj nazwę użytkownika: ");
+            string username = Console.ReadLine();
+            Console.Write("Podaj hasło: ");
+            string password = Console.ReadLine();
+            Console.Write("Podaj rolę (admin/user): ");
+            string role = Console.ReadLine().ToLower();
+            userManager.RegisterUser(username, password, role);
+        }
+
+        static void LoginUser()
+        {
+            UserManager userManager = new UserManager();
+            Console.Write("Podaj nazwę użytkownika: ");
+            string loginUsername = Console.ReadLine();
+            Console.Write("Podaj hasło: ");
+            string loginPassword = Console.ReadLine();
+            User user = new User()
+            {
+                Username = loginUsername,
+                Password = loginPassword
+            };
+            var loggedInUser = userManager.Login(user);
+            if (loggedInUser != null)
+            {
+                currentUser = loggedInUser;
+            }
+        }
+
         static void AddJobOffer()
         {
             Console.Write("Podaj nazwę stanowiska: ");
             string title = Console.ReadLine();
             Console.Write("Podaj nazwę firmy: ");
             string company = Console.ReadLine();
-            Console.Write("Podaj lokalizację: ");
+            Console.Write("Podaj lokalizację™: ");
             string location = Console.ReadLine();
 
             var offer = new JobOffer(title, company, location);
@@ -96,6 +146,8 @@ namespace JobSystemApp
 
         static void DisplayJobOffers()
         {
+            if (!IsLoggedIn()) return;
+
             if (jobOffers.Count == 0)
             {
                 Console.WriteLine("Brak ofert pracy.");
