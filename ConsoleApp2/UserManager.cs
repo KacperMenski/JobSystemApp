@@ -1,25 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
+using UserManagementApp;
 
-namespace UserManagementApp
+namespace JobSystemApp
 {
-    public class User
-    {
-        private string? loginUsername;
-        private string? loginPassword;
-
-        
-
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
-
-        
-    }
-
     public class UserManager
     {
         private const string FilePath = "users.json";
@@ -29,7 +17,7 @@ namespace UserManagementApp
         public UserManager()
         {
             users = LoadUsers();
-            nextId = users.Count > 0 ? users[^1].Id + 1 : 1; 
+            nextId = users.Count > 0 ? users[^1].Id + 1 : 1;
         }
 
         private List<User> LoadUsers()
@@ -51,7 +39,7 @@ namespace UserManagementApp
 
         public void RegisterUser(string username, string password, string role)
         {
-            
+
             if (users.Exists(u => u.Username == username))
             {
                 Console.WriteLine("Użytkownik o tej nazwie już istnieje.");
@@ -80,7 +68,7 @@ namespace UserManagementApp
             Thread.Sleep(2000);
         }
 
-       
+
 
         public User Login(User user)
         {
@@ -94,6 +82,7 @@ namespace UserManagementApp
             }
 
             Console.WriteLine($"Zalogowano jako {entity.Username}. Rola: {entity.Role}");
+            user.SayHello(user);
             Thread.Sleep(2000);
             return entity;
         }
@@ -103,6 +92,4 @@ namespace UserManagementApp
             return user != null && user.Role == "admin";
         }
     }
-
- 
 }

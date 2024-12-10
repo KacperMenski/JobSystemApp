@@ -4,12 +4,13 @@ using System.Data;
 using System.Text.Json;
 using UserManagementApp;
 
+
 namespace JobSystemApp
 {
     class Program
     {
         static List<JobOffer> jobOffers = new List<JobOffer>();
-        static User currentUser = null; 
+        static User currentUser = null;
 
         static void Main(string[] args)
         {
@@ -56,7 +57,7 @@ namespace JobSystemApp
                             break;
                         case "0":
                             Console.WriteLine("Do widzenia!");
-                            return; // Kończy działanie programu
+                            return; 
                     }
                 }
                 else
@@ -76,9 +77,9 @@ namespace JobSystemApp
                             if (IsLoggedIn() && currentUser.Role == "admin") LoadFromJSON();
                             break;
                         case "0":
-                            currentUser = null; // Wylogowanie
+                            currentUser = null; 
                             Console.WriteLine("Wylogowano. Wróć do logowania.");
-                            Console.ReadKey();
+                            Thread.Sleep(2000);
                             break;
                     }
                 }
@@ -91,7 +92,7 @@ namespace JobSystemApp
             if (currentUser == null)
             {
                 Console.WriteLine("Musisz być zalogowany, aby wykonać tą operację.");
-                Console.ReadKey();
+                Thread.Sleep(2000);
                 return false;
             }
             return true;
@@ -134,14 +135,14 @@ namespace JobSystemApp
             string title = Console.ReadLine();
             Console.Write("Podaj nazwę firmy: ");
             string company = Console.ReadLine();
-            Console.Write("Podaj lokalizację™: ");
+            Console.Write("Podaj lokalizację: ");
             string location = Console.ReadLine();
 
             var offer = new JobOffer(title, company, location);
             jobOffers.Add(offer);
 
             Console.WriteLine("Oferta została dodana.");
-            Console.ReadKey();
+            Thread.Sleep(2000);
         }
 
         static void DisplayJobOffers()
@@ -159,7 +160,7 @@ namespace JobSystemApp
                     Console.WriteLine(offer.ToString());
                 }
             }
-            Console.ReadKey();
+            Thread.Sleep(2000);
         }
 
         static void SaveToJSON()
@@ -172,7 +173,7 @@ namespace JobSystemApp
 
             File.WriteAllText(fileName, json);
             Console.WriteLine("Oferty zapisano do pliku.");
-            Console.ReadKey();
+            Thread.Sleep(2000);
         }
 
         static void LoadFromJSON()
@@ -190,7 +191,7 @@ namespace JobSystemApp
             {
                 Console.WriteLine("Plik nie istnieje.");
             }
-            Console.ReadKey();
+            Thread.Sleep(2000);
         }
     }
 }

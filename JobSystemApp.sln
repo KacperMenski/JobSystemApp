@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobSystemApp", "ConsoleApp2\JobSystemApp.csproj", "{17974224-A10C-4FEB-AF07-1614192932ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobSystemApp", "ConsoleApp2\JobSystemApp.csproj", "{17974224-A10C-4FEB-AF07-1614192932ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{F56808E4-D957-4CF4-A91F-37D097BA79D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{F56808E4-D957-4CF4-A91F-37D097BA79D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestJednostkowy", "TestJednostkowy\TestJednostkowy.csproj", "{00EFE647-96E7-4473-8618-9F7B0CC8143E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F56808E4-D957-4CF4-A91F-37D097BA79D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F56808E4-D957-4CF4-A91F-37D097BA79D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F56808E4-D957-4CF4-A91F-37D097BA79D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EFE647-96E7-4473-8618-9F7B0CC8143E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EFE647-96E7-4473-8618-9F7B0CC8143E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EFE647-96E7-4473-8618-9F7B0CC8143E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EFE647-96E7-4473-8618-9F7B0CC8143E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
